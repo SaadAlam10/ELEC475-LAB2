@@ -1,0 +1,62 @@
+ELEC 475 Lab 2 List of Commands
+
+# Set up environment + Install Dependencies
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+
+# Download datasets and generate EDA plots
+python -m utils.eda --dataset both
+
+# Transform demo
+python demo_transforms.py
+
+# Model complexity benchmark
+python compare_models.py --dataset cifar10
+
+# CIFAR-10: LeNet models (--no-augment used to reflect the table in Post Lab Instructions Document)
+python train.py --model lenet --dataset cifar10 --epochs 5 --batch-size 128 --no-augment --seed 42 --save-model checkpoints/lenet_baseline.pth --plot-file plots/loss_lenet.png
+
+python train.py --model lenet_modern --dataset cifar10 --epochs 5 --batch-size 128 --no-augment --seed 42 --save-model checkpoints/lenet_modern.pth --plot-file plots/loss_lenet_modern.png
+
+# CIFAR-10: AlexNet normalization study
+python train.py --model alexnet --norm none --dataset cifar10 --epochs 10 --no-augment --seed 42 --save-model checkpoints/alexnet_none_noaug.pth --plot-file plots/loss_alexnet_none_noaug.png
+
+python train.py --model alexnet --norm lrn --dataset cifar10 --epochs 10 --no-augment --seed 42 --save-model checkpoints/alexnet_lrn_noaug.pth --plot-file plots/loss_alexnet_lrn_noaug.png
+
+python train.py --model alexnet --norm bn --dataset cifar10 --epochs 10 --no-augment --seed 42 --save-model checkpoints/alexnet_bn.pth --plot-file plots/loss_alexnet_bn.png
+
+# CIFAR-10: Augmentation study
+python train.py --model alexnet --norm bn --dataset cifar10 --epochs 15 --no-augment --seed 42 --save-model checkpoints/alexnet_no_aug.pth --plot-file plots/loss_no_aug.png
+
+python train.py --model alexnet --norm bn --dataset cifar10 --epochs 15 --seed 42 --save-model checkpoints/alexnet_with_aug.pth --plot-file plots/loss_with_aug.png
+
+# CIFAR-10: Zoo AlexNet
+python train.py --model zoo_alexnet --dataset cifar10 --epochs 10 --no-augment --seed 42 --save-model checkpoints/zoo_alexnet.pth --plot-file plots/loss_zoo.png
+
+# CIFAR-10: Multi-seed (seeds 1 and 2)
+python train.py --model alexnet --norm bn --dataset cifar10 --epochs 10 --no-augment --seed 1 --save-model checkpoints/alexnet_bn_s1.pth --plot-file plots/loss_alexnet_bn_s1.png
+
+python train.py --model alexnet --norm bn --dataset cifar10 --epochs 10 --no-augment --seed 2 --save-model checkpoints/alexnet_bn_s2.pth --plot-file plots/loss_alexnet_bn_s2.png
+
+# Tiny ImageNet: LeNet models
+python train.py --model lenet --dataset tiny_imagenet --epochs 5 --batch-size 128 --no-augment --seed 42 --save-model checkpoints/lenet_tiny.pth --plot-file plots/loss_lenet_tiny.png
+
+python train.py --model lenet_modern --dataset tiny_imagenet --epochs 5 --batch-size 128 --no-augment --seed 42 --save-model checkpoints/lenet_modern_tiny.pth --plot-file plots/loss_lenet_modern_tiny.png
+
+# Tiny ImageNet: AlexNet models
+python train.py --model alexnet --norm none --dataset tiny_imagenet --epochs 10 --no-augment --seed 42 --save-model checkpoints/alexnet_none_tiny_noaug.pth --plot-file plots/loss_alexnet_none_tiny_noaug.png
+
+python train.py --model alexnet --norm lrn --dataset tiny_imagenet --epochs 10 --no-augment --seed 42 --save-model checkpoints/alexnet_lrn_tiny_noaug.pth --plot-file plots/loss_alexnet_lrn_tiny_noaug.png
+
+python train.py --model alexnet --norm bn --dataset tiny_imagenet --epochs 10 --no-augment --seed 42 --save-model checkpoints/alexnet_bn_tiny_noaug.pth --plot-file plots/loss_alexnet_bn_tiny_noaug.png
+
+python train.py --model alexnet --norm bn --dataset tiny_imagenet --epochs 10 --seed 42 --save-model checkpoints/alexnet_tiny_imagenet.pth --plot-file plots/loss_tiny_imagenet.png
+
+python train.py --model alexnet --norm bn --dataset tiny_imagenet --epochs 15 --no-augment --seed 42 --save-model checkpoints/alexnet_bn_tiny_noaug_15.pth --plot-file plots/loss_alexnet_bn_tiny_noaug_15.png
+
+# Tiny ImageNet: Zoo AlexNet
+python train.py --model zoo_alexnet --dataset tiny_imagenet --epochs 10 --no-augment --seed 42 --save-model checkpoints/zoo_alexnet_tiny.pth --plot-file plots/loss_zoo_tiny.png
+
+# Ablation summary plot
+python plot_ablation.py
